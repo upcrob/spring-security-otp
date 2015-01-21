@@ -1,0 +1,42 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+
+jar.baseName = 'spring-security-otp'
+jar.version = '0.1.0'
+
+repositories {
+	mavenCentral()
+
+	maven {
+		url "http://dl.bintray.com/upcrob/maven"
+	}
+}
+
+dependencies {
+	// spring
+	compile 'org.springframework:spring-context:3.2.13.RELEASE'
+	compile 'org.springframework.security:spring-security-web:3.2.5.RELEASE'
+	compile 'org.springframework.ldap:spring-ldap-core:2.0.2.RELEASE'
+	compile 'org.springframework.data:spring-data-jpa:1.7.1.RELEASE'
+	
+	// servlet
+	compile 'javax.servlet:javax.servlet-api:3.0.1'
+	
+	// mail
+	compile 'com.sun.mail:javax.mail:1.5.2'
+	
+	// derby
+	compile 'org.apache.derby:derby:10.11.1.1'
+	
+	// testing
+	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
+	testCompile 'org.codehaus.groovy:groovy-all:2.0.1'
+	testRuntime 'cglib:cglib-nodep:3.1'
+	testRuntime 'org.objenesis:objenesis:1.4'
+	testCompile 'com.upcrob.derby:derby-testing:1.0.0'
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.2.1'
+}
