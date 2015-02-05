@@ -69,11 +69,6 @@ public class OtpGenerationFilter extends GenericFilterBean {
 			throw new AuthenticationServiceException("Authentication method not supported: " + req.getMethod());
 		}
 
-		String path = req.getRequestURI().substring(req.getContextPath().length());
-		if (!path.equals(endpoint)) {
-			chain.doFilter(request, response);
-			return;
-		}
 		String username = req.getParameter(usernameParameter);
 		if (username == null) {
 			throw new ServletException("No username on request.");
