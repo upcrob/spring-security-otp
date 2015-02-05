@@ -59,16 +59,21 @@ public class OtpGenerationFilter extends GenericFilterBean {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		
-		if (postOnly && !"POST".equals(req.getMethod())) {
-			throw new AuthenticationServiceException("Authentication method not supported: " + req.getMethod());
-		}
-		
 		String path = req.getRequestURI().substring(req.getContextPath().length());
 		if (!path.equals(endpoint)) {
 			chain.doFilter(request, response);
 			return;
 		}
 		
+		if (postOnly && !"POST".equals(req.getMethod())) {
+			throw new AuthenticationServiceException("Authentication method not supported: " + req.getMethod());
+		}
+
+		String path = req.getRequestURI().substring(req.getContextPath().length());
+		if (!path.equals(endpoint)) {
+			chain.doFilter(request, response);
+			return;
+		}
 		String username = req.getParameter(usernameParameter);
 		if (username == null) {
 			throw new ServletException("No username on request.");
