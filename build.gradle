@@ -29,6 +29,12 @@ dependencies {
 	// derby
 	compile 'org.apache.derby:derby:10.11.1.1'
 	
+	// redis
+	compile 'redis.clients:jedis:2.6.2'
+	
+	// logging
+	compile 'org.slf4j:slf4j-api:1.7.5'
+	
 	// testing
 	testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
 	testCompile 'org.codehaus.groovy:groovy-all:2.0.1'
