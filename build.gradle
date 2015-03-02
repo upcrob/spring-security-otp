@@ -3,7 +3,7 @@ apply plugin: 'groovy'
 apply plugin: 'eclipse'
 
 jar.baseName = 'spring-security-otp'
-jar.version = '0.1.2'
+jar.version = '0.2.0'
 
 repositories {
 	mavenCentral()

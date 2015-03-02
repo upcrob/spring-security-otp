@@ -45,7 +45,7 @@ public class OtpGenerationFilter extends GenericFilterBean {
 		this.tokenStore = tokenStore;
 		this.lookupStrategy = lookupStrategy;
 		this.sendStrategy = sendStrategy;
-		this.gen = new OtpGenerator(DEFAULT_OTP_LENGTH);
+		this.gen = new DefaultOtpGenerator(DEFAULT_OTP_LENGTH);
 		this.endpoint = endpoint;
 		this.postOnly = false;
 	}
