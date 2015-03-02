@@ -16,7 +16,7 @@ import org.springframework.util.Assert;
  * 
  * The table used to store the tokens must conform to the following schema:
  *   username VARCHAR(255) PRIMARY KEY
- *   token CHAR/VARCHAR(255)            (size depends upon maximum token size selected)
+ *   token CHAR(255) or VARCHAR(255)     (size depends upon maximum token size selected)
  *   expires BIGINT
  */
 public class JdbcTokenstore implements Tokenstore {
@@ -41,8 +41,8 @@ public class JdbcTokenstore implements Tokenstore {
 		String query = "INSERT INTO "
 				+ table
 				+ " (username,token,expires) VALUES ("
-				+ "'" + username + "',"
-				+ "'" + token + "',"
+				+ "'" + username.replaceAll("'", "") + "',"
+				+ "'" + token.replaceAll("'", "") + "',"
 				+ (System.currentTimeMillis() + (maxLifetime * 1000))
 				+ ")";
 		jdbc.execute(query);
@@ -54,11 +54,11 @@ public class JdbcTokenstore implements Tokenstore {
 		String query = "SELECT token,expires FROM "
 				+ table
 				+ " WHERE username = '"
-				+ username
+				+ username.replaceAll("'", "")
 				+ "'";
 		List<Token> tokens = jdbc.query(query, mapper);
 		if (tokens.size() > 0) {
-			query = "DELETE FROM " + table + " WHERE username = '" + username + "'";
+			query = "DELETE FROM " + table + " WHERE username = '" + username.replaceAll("'", "") + "'";
 			jdbc.update(query);
 			Token t = tokens.get(0);
 			if (!t.value.equals(token) || t.expires < System.currentTimeMillis()) {
