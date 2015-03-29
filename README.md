@@ -4,13 +4,15 @@ The Spring Security OTP plugin adds one-time password (OTP) functionality to app
 
 ## Components
 
-### OtpGenerationFilter
+### OtpGeneratingAuthenticationProvider
 
-This filter behaves as the endpoint for token generation requests.  Usually, these requests will come in as AJAX calls from the login page.  When this filter receives a username from the an HTTP call, it uses the `LookupStrategy` injected into it to determine where (email address, phone number, etc) the `SendStrategy` should send the generated OTP token.  The generated token is stored in the filter's assigned `Tokenstore`.
+This wraps an existing `AuthenticationProvider`.  The authentication request is delegated to the wrapped provider's authenticate() method and the `Authentication` token returned (e.g. a `UsernamePasswordAuthenticationToken`)by this embedded provider is subsequently wrapped in a `PreOtpAuthenticationToken`.  This token contains the principal and details of the wrapped token, but does not expose its authorities.
 
-### OtpAuthenticationFilter
+If the embedded authentication provider authenticates the user successfully, the `OtpGeneratingAuthenticationProvider` will use its `Tokenstore`, `LookupStrategy` and `SendStrategy` to generate a one-time password token and attempt to send it to the user for entry on a subsequent form.
 
-This filter extends the functionality of Spring Security's `UsernamePasswordAuthenticationFilter` by adding a required OTP token parameter to incoming requests.  When it receives an authentication request, it first checks the `Tokenstore` to verify that the OTP token on the request is valid.  If so, the filter continues by attempting to verify the username and password.  If either the username/password or OTP token check fail, an `AuthenticationException` will be thrown.
+### OtpValidationFilter
+
+This listens on a preconfigured endpoint for an OTP token sent by the user (from an OTP entry form).  If the user's token in the `SecurityContext` is a `PreOtpAuthenticationToken`, the filter will attempt to validate their OTP token from the input form against the `Tokenstore`.  If successful, the embedded token in the `PreOtpAuthenticationToken` will be unwrapped and they will be redirected to the success URL.  If unsuccessful, their token will be invalidated and they will be redirected to the failure URL.
 
 ### Tokenstore
 
